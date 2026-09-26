@@ -14,14 +14,14 @@ Current MediaMTX base:
 - MediaMTX: `v1.21.1`
 - custom branch: `enhanced-rtmp-multitrack`
 - MediaMTX patch commit:
-  `dd9f4dfb1c51d074db686c53767c2e0c31c991d1`
+  `81cd20ecb4daa3f091c0798e6360b52211fdaf7e`
 
 The RTMP protocol changes are provided by a companion gortmplib fork:
 
 - repository: https://github.com/YannLSF/gortmplib
 - branch: `enhanced-rtmp-multitrack`
 - pinned commit:
-  `3f7e4ab7ed7de6f2fdd5c53ab0315fb5c9f43d45`
+  `cb3eae9f5733c14c01d19398520a140c8927c29b`
 
 The gortmplib fork is included as the `gortmplib-local` Git submodule and is
 referenced from `go.mod` with:
@@ -91,7 +91,7 @@ git -C gortmplib-local rev-parse HEAD
 The expected revision for this MediaMTX commit is:
 
 ```text
-3f7e4ab7ed7de6f2fdd5c53ab0315fb5c9f43d45
+cb3eae9f5733c14c01d19398520a140c8927c29b
 ```
 
 Do not use `git submodule update --remote` unless you intentionally want to

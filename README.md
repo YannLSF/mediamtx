@@ -1,3 +1,17 @@
+<!-- YANNLSF-ENHANCED-RTMP -->
+
+> [!IMPORTANT]
+> **Enhanced RTMP multitrack fork**
+>
+> The `enhanced-rtmp-multitrack` branch adds experimental Enhanced RTMP
+> multitrack publishing and forwarding support and uses a patched gortmplib
+> submodule.
+>
+> See **[ENHANCED_RTMP.md](ENHANCED_RTMP.md)** for architecture, build
+> instructions, the pinned dependency revision and upgrade notes.
+
+---
+
 <h1 align="center">
   <a href="https://mediamtx.org">
     <img src="logo.png" alt="MediaMTX">

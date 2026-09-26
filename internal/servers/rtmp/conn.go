@@ -205,7 +205,8 @@ func (c *conn) runRead() error {
 		c.rconn,
 		c.nconn,
 		time.Duration(c.writeTimeout),
-		c.rconn.FourCcList)
+		c.rconn.FourCcList,
+		res.Stream.RTMPMetadata)
 	if err != nil {
 		return err
 	}
@@ -296,6 +297,7 @@ func (c *conn) runPublish() error {
 	res2, err := c.pathManager.AddPublisher(defs.PathAddPublisherReq{
 		Author:        c,
 		Desc:          &description.Session{Medias: medias},
+		RTMPMetadata:  r.Metadata(),
 		UseRTPPackets: false,
 		ReplaceNTP:    true,
 		ConfToCompare: res1.Conf,

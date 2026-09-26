@@ -71,6 +71,7 @@ type PathAddPublisherRes struct {
 type PathAddPublisherReq struct {
 	Author        Publisher
 	Desc          *description.Session
+	RTMPMetadata  []any
 	UseRTPPackets bool
 	ReplaceNTP    bool
 	ConfToCompare *conf.Path

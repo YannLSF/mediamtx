@@ -274,6 +274,7 @@ func cloneDesc(desc *description.Session) *description.Session {
 // It stores tracks, readers and allows to write data to readers, remuxing it when needed.
 type Stream struct {
 	OrigDesc              *description.Session
+	RTMPMetadata          []any
 	AlwaysAvailable       bool
 	AlwaysAvailableTracks []conf.AlwaysAvailableTrack
 	AlwaysAvailableFile   string

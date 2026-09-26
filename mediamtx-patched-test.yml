@@ -1,0 +1,19 @@
+logLevel: info
+
+api: true
+apiAddress: 127.0.0.1:9999
+
+rtmp: true
+rtmpEncryption: "no"
+rtmpAddress: :1938
+
+rtsp: false
+hls: false
+webrtc: false
+srt: false
+moq: false
+
+paths:
+  "~^app/(.+)$":
+    forward:
+      - dest: "rtmps://ingest.global-contribute.live-video.net/app#$G1?$MTX_QUERY"

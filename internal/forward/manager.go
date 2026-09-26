@@ -35,6 +35,7 @@ type Manager struct {
 	destHandlers []*DestHandler
 	started      bool
 	stream       *stream.Stream
+	query        string
 }
 
 // Initialize initializes Manager.
@@ -84,7 +85,7 @@ func (m *Manager) ReloadConf(forward conf.Forward) {
 
 			destHandler := m.createDestHandler(i+1, dest)
 			if m.started {
-				destHandler.start(m.stream)
+				destHandler.start(m.stream, m.query)
 			}
 
 			newHandlers[i] = destHandler
@@ -107,12 +108,13 @@ func (m *Manager) ReloadConf(forward conf.Forward) {
 }
 
 // Start starts all forward destinations.
-func (m *Manager) Start(strm *stream.Stream) {
+func (m *Manager) Start(strm *stream.Stream, query string) {
 	m.started = true
 	m.stream = strm
+	m.query = query
 
 	for _, dest := range m.destHandlers {
-		dest.start(strm)
+		dest.start(strm, query)
 	}
 }
 

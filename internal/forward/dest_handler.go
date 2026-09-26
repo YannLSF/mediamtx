@@ -37,8 +37,9 @@ func sanitizeDestURL(dest string) string {
 	return u.String()
 }
 
-func resolveDest(dest string, pathName string, matches []string) string {
+func resolveDest(dest string, pathName string, query string, matches []string) string {
 	out := strings.ReplaceAll(dest, "$MTX_PATH", pathName)
+	out = strings.ReplaceAll(out, "$MTX_QUERY", query)
 
 	for i := len(matches) - 1; i >= 1; i-- {
 		out = strings.ReplaceAll(out, "$G"+strconv.FormatInt(int64(i), 10), matches[i])
@@ -134,11 +135,11 @@ func (h *DestHandler) initialize() {
 	h.state = defs.APIForwardDestStateIdle
 }
 
-func (h *DestHandler) start(strm *stream.Stream) {
+func (h *DestHandler) start(strm *stream.Stream ,query string) {
 	h.Log(logger.Debug, "starting")
 	h.ctx, h.ctxCancel = context.WithCancel(context.Background())
 	h.done = make(chan struct{})
-	go h.run(strm)
+	go h.run(strm, query)
 }
 
 func (h *DestHandler) stop() {
@@ -159,7 +160,7 @@ func (h *DestHandler) Log(level logger.Level, format string, args ...any) {
 		append([]any{strings.ToUpper(string(h.protocol)), h.Pos, id}, args...)...)
 }
 
-func (h *DestHandler) run(strm *stream.Stream) {
+func (h *DestHandler) run(strm *stream.Stream, query string) {
 	defer close(h.done)
 
 	defer func() {
@@ -174,7 +175,7 @@ func (h *DestHandler) run(strm *stream.Stream) {
 		h.lastError = ""
 		h.mutex.Unlock()
 
-		err := h.runOnce(strm)
+		err := h.runOnce(strm, query)
 		if errors.Is(err, errTerminated) {
 			return
 		}
@@ -196,8 +197,8 @@ func (h *DestHandler) run(strm *stream.Stream) {
 	}
 }
 
-func (h *DestHandler) runOnce(strm *stream.Stream) error {
-	resolvedDest := resolveDest(h.Conf.Dest, h.PathName, h.Matches)
+func (h *DestHandler) runOnce(strm *stream.Stream, query string) error {
+	resolvedDest := resolveDest(h.Conf.Dest, h.PathName, query, h.Matches)
 
 	var dest Dest
 

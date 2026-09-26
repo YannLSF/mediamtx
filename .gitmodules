@@ -1,0 +1,4 @@
+[submodule "gortmplib-local"]
+	path = gortmplib-local
+	url = https://github.com/YannLSF/gortmplib.git
+	branch = enhanced-rtmp-multitrack

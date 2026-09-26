@@ -233,7 +233,7 @@ func (pa *path) run() {
 	defer pa.wg.Done()
 
 	if pa.conf.AlwaysAvailable {
-		err := pa.setAvailable(nil, "", nil, true)
+		err := pa.setAvailable(nil, "", nil, nil, true)
 		if err != nil {
 			panic(err)
 		}
@@ -479,7 +479,7 @@ func (pa *path) doReloadConf(newConf *conf.Path) {
 
 func (pa *path) doSourceStaticSetReady(req defs.PathSourceStaticSetReadyReq) {
 	if !pa.conf.AlwaysAvailable {
-		err := pa.setAvailable(pa.source, "", req.Desc, req.ReplaceNTP)
+		err := pa.setAvailable(pa.source, "", req.Desc, nil, req.ReplaceNTP)
 		if err != nil {
 			req.Res <- defs.PathSourceStaticSetReadyRes{Err: err}
 			return
@@ -603,7 +603,7 @@ func (pa *path) doAddPublisher(req defs.PathAddPublisherReq) {
 	}
 
 	if !pa.conf.AlwaysAvailable {
-		err := pa.setAvailable(req.Author, req.AccessRequest.Query, req.Desc, req.ReplaceNTP)
+		err := pa.setAvailable(req.Author, req.AccessRequest.Query, req.Desc, req.RTMPMetadata, req.ReplaceNTP)
 		if err != nil {
 			req.Res <- defs.PathAddPublisherRes{Err: err}
 			return
@@ -935,10 +935,12 @@ func (pa *path) setAvailable(
 	source defs.Source,
 	publisherQuery string,
 	desc *description.Session,
+	rtmpMetadata []any,
 	replaceNTP bool,
 ) error {
 	pa.stream = &stream.Stream{
 		OrigDesc:              desc,
+		RTMPMetadata:          append([]any(nil), rtmpMetadata...),
 		AlwaysAvailable:       pa.conf.AlwaysAvailable,
 		AlwaysAvailableTracks: pa.conf.AlwaysAvailableTracks,
 		AlwaysAvailableFile:   pa.conf.AlwaysAvailableFile,
@@ -972,7 +974,7 @@ func (pa *path) setAvailable(
 		pa.setOnline(sourceDesc, publisherQuery)
 	}
 
-	pa.forwardManager.Start(pa.stream)
+	pa.forwardManager.Start(pa.stream, publisherQuery)
 
 	if pa.conf.Record && (!pa.conf.AlwaysAvailable || pa.conf.AlwaysAvailableRecorded) {
 		pa.startRecording()

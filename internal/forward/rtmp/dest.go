@@ -162,7 +162,8 @@ func (d *Dest) runInner(conn *gortmplib.Client, terminate <-chan struct{}) error
 		conn,
 		conn.NetConn(),
 		time.Duration(d.WriteTimeout),
-		fourCCList(outDesc))
+		fourCCList(outDesc),
+		d.Stream.RTMPMetadata)
 	if err != nil {
 		return fmt.Errorf("initialize RTMP destination writer: %w", err)
 	}

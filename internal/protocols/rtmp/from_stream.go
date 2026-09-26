@@ -52,6 +52,7 @@ func FromStream(
 	nconn net.Conn,
 	writeTimeout time.Duration,
 	fourCcList amf0.StrictArray,
+	metadata []any,
 ) error {
 	var tracks []*gortmplib.Track
 	var w *gortmplib.Writer
@@ -514,8 +515,9 @@ func FromStream(
 	}
 
 	w = &gortmplib.Writer{
-		Conn:   conn,
-		Tracks: tracks,
+		Conn:     conn,
+		Tracks:   tracks,
+		Metadata: metadata,
 	}
 	err := w.Initialize()
 	if err != nil {
